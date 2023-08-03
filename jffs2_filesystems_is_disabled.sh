@@ -6,7 +6,7 @@ if [ ! -f "/etc/modprobe.d/jffs2.conf" ]; then
     sudo touch /etc/modprobe.d/jffs2.conf
 
     # Set the permissions of the file to 755
-    sudo chmod 755 /etc/modprobe.d/jffs2.conf
+    sudo chmod 644 /etc/modprobe.d/jffs2.conf
 
     # Add the configuration line to disable cramfs in the jffs2.conf file
     echo "install cramfs /bin/true" | sudo tee /etc/modprobe.d/jffs2.conf > /dev/null

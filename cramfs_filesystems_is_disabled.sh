@@ -6,7 +6,7 @@ if [ ! -f "/etc/modprobe.d/cramfs.conf" ]; then
     sudo touch /etc/modprobe.d/cramfs.conf
 
     # Set the permissions of the file to 755
-    sudo chmod 755 /etc/modprobe.d/cramfs.conf
+    sudo chmod 644 /etc/modprobe.d/cramfs.conf
 
     # Add the configuration line to disable cramfs in the cramfs.conf file
     echo "install cramfs /bin/true" | sudo tee /etc/modprobe.d/cramfs.conf > /dev/null

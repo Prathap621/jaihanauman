@@ -94,6 +94,7 @@ fi
 
 # Reload audit rules
 augenrules --load
+auditctl -l
 
 # Restart auditd service
 service auditd restart

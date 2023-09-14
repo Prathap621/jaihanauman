@@ -1,0 +1,6 @@
+# Check if AppArmor is installed
+if dpkg -l | grep -q apparmor; then
+    uninstall_apparmor
+else
+    echo "AppArmor is not installed on your system."
+fi

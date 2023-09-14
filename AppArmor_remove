@@ -1,5 +1,25 @@
-# Check if AppArmor is installed
-if dpkg -l | grep -q apparmor; then
+#!/bin/bash
+
+# Function to uninstall AppArmor
+uninstall_apparmor() {
+    echo "Uninstalling AppArmor..."
+    sudo apt-get purge apparmor -y
+    sudo apt-get autoremove -y
+    sudo apt-get update
+    echo "AppArmor has been uninstalled."
+}
+
+# Function to check if AppArmor is installed
+check_apparmor() {
+    if dpkg -l | grep -q apparmor; then
+        return 0 # AppArmor is installed
+    else
+        return 1 # AppArmor is not installed
+    fi
+}
+
+# Check if AppArmor is installed and uninstall if necessary
+if check_apparmor; then
     uninstall_apparmor
 else
     echo "AppArmor is not installed on your system."

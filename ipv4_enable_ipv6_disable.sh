@@ -67,4 +67,4 @@ echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 # Apply the changes
 sysctl -p
 
-echo "Sysctl entries have
+echo "Sysctl entries have"

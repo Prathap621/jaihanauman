@@ -1,26 +1,59 @@
 #!/bin/bash
 
-# Function to uninstall AppArmor
-uninstall_apparmor() {
-    echo "Uninstalling AppArmor..."
-    sudo apt-get purge apparmor -y
-    sudo apt-get autoremove -y
-    sudo apt-get update
-    echo "AppArmor has been uninstalled."
-}
-
-# Function to check if AppArmor is installed
-check_apparmor() {
-    if dpkg -l | grep -q apparmor; then
-        return 0 # AppArmor is installed
+# Function to check if a package is installed
+is_package_installed() {
+    local package_name="$1"
+    if dpkg -l | grep -q "ii  $package_name "; then
+        return 0 # Package is installed
     else
-        return 1 # AppArmor is not installed
+        return 1 # Package is not installed
     fi
 }
 
-# Check if AppArmor is installed and uninstall if necessary
-if check_apparmor; then
-    uninstall_apparmor
-else
-    echo "AppArmor is not installed on your system."
-fi
+# Function to remove apparmor
+remove_apparmor() {
+    echo "Removing apparmor..."
+    sudo apt remove apparmor -y
+    sudo apt purge apparmor -y
+}
+
+# Function to remove ufw
+remove_ufw() {
+    echo "Removing ufw..."
+    sudo apt remove ufw -y
+}
+
+# Function to update package list
+update_package_list() {
+    echo "Updating package list..."
+    sudo apt update
+}
+
+# Function to perform apt autoremove
+perform_autoremove() {
+    echo "Performing apt autoremove..."
+    sudo apt autoremove -y
+}
+
+# Main script
+main() {
+    update_package_list
+
+    if is_package_installed "apparmor"; then
+        remove_apparmor
+    else
+        echo "apparmor is not installed."
+    fi
+
+    if is_package_installed "ufw"; then
+        remove_ufw
+    else
+        echo "ufw is not installed."
+    fi
+
+    perform_autoremove
+    echo "Tasks completed."
+}
+
+# Run the main function
+main

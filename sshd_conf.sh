@@ -20,7 +20,7 @@ function configure_ssh_parameters_almalinux() {
   sudo sed -i '/^#LoginGraceTime/c\LoginGraceTime 60' /etc/ssh/sshd_config
   sudo sed -i '/^#ClientAliveInterval/c\ClientAliveInterval 120' /etc/ssh/sshd_config
   sudo sed -i '/^#ClientAliveCountMax/c\ClientAliveCountMax 3' /etc/ssh/sshd_config
-  sudo sed -i '/^#PermitRootLogin/c\PermitRootLogin no' /etc/ssh/sshd_config
+  sudo sed -i '/^#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config
   sudo sed -i '/^#X11Forwarding/c\X11Forwarding no' /etc/ssh/sshd_config
   sudo sed -i '/^#MaxStartups/c\MaxStartups 10:30:100' /etc/ssh/sshd_config
 }

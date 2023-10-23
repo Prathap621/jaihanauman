@@ -27,14 +27,14 @@ sysctl_entries=(
   "net.ipv4.tcp_mem = 30000000 30000000 30000000"
   "net.ipv4.tcp_rmem = 30000000 30000000 30000000"
   "net.ipv4.tcp_sack = 1"
-  "net.ipv4.tcp_syncookies = 0"
+  "net.ipv4.tcp_syncookies = 1"
   "net.ipv4.tcp_wmem = 30000000 30000000 30000000"
   "kernel.pid_max = 4194303"
   "net.ipv4.tcp_keepalive_time = 1800"
   "net.ipv4.tcp_keepalive_intvl = 10"
   "net.ipv4.tcp_keepalive_probes = 6"
   "vm.overcommit_memory = 0"
-  "net.ipv4.ip_forward = 1"
+  "net.ipv4.ip_forward = 0"
 )
 
 # Function to check if a sysctl entry is present in /etc/sysctl.conf

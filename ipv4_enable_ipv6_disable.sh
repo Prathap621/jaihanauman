@@ -34,7 +34,7 @@ sysctl_entries=(
   "net.ipv4.tcp_keepalive_intvl = 10"
   "net.ipv4.tcp_keepalive_probes = 6"
   "vm.overcommit_memory = 0"
-  "net.ipv4.ip_forward = 0"
+  "net.ipv4.ip_forward = 1"
 )
 
 # Function to check if a sysctl entry is present in /etc/sysctl.conf

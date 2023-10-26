@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TMOUT_VALUE=3600
+TMOUT_VALUE=600
 
 # Check if the script is run with root privileges
 if [ "$EUID" -ne 0 ]; then

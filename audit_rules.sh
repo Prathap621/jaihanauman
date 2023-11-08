@@ -79,6 +79,7 @@ audit_rules=$(cat <<EOF
 -w /etc/sudoers.d/ -p wa -k scope
 -w /var/log/wtmp -p wa -k session
 -w /etc/network/ -p wa -k system-locale
+-e 2
 EOF
 )
 

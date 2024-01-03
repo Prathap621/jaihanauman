@@ -12,12 +12,6 @@ else
     # For example, on Debian/Ubuntu-based systems:
     sudo apt-get update
     sudo apt-get install -y rsync
-    
-    # On Red Hat/Fedora-based systems:
-    # sudo yum install -y rsync
-    
-    # On Arch Linux:
-    # sudo pacman -S rsync
-    
+        
     echo "rsync installed successfully."
 fi

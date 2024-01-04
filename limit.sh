@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Lines to add to /etc/security/limits.conf
-lines_to_add="* soft nofile 100000
-* hard nofile 100000"
+lines_to_add="tomcat soft nofile 100000
+tomcat hard nofile 100000"
 
 # Check if the lines are already present
 if grep -Fxq "$lines_to_add" /etc/security/limits.conf; then

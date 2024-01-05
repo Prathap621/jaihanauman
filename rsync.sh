@@ -1,17 +1,14 @@
 #!/bin/bash
 
-# Check if rsync is installed
-if command -v rsync &> /dev/null
-then
-    echo "rsync is already installed."
-else
-    # Install rsync
-    echo "Installing rsync..."
-    # You can use the package manager appropriate for your system (apt, yum, pacman, etc.)
-    
-    # For example, on Debian/Ubuntu-based systems:
-    sudo apt-get update
-    sudo apt-get install -y rsync
-        
-    echo "rsync installed successfully."
-fi
+packages=("rsync" "cloud-guest-utils" "xfsprogs" "ssmtp" "mailutils" "nscd" "snmpd" "mlocate")
+
+for package in "${packages[@]}"; do
+    if command -v "$package" &> /dev/null; then
+        echo "$package is already installed."
+    else
+        echo "Installing $package..."
+        sudo apt-get update
+        sudo apt-get install -y "$package"
+        [ $? -eq 0 ] && echo "$package installed successfully." || echo "Error installing $package. Please check and try again."
+    fi
+done

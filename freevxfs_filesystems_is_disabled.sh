@@ -9,7 +9,7 @@ if [ ! -f "/etc/modprobe.d/freevxfs.conf" ]; then
     sudo chmod 644 /etc/modprobe.d/freevxfs.conf
 
     # Add the configuration line to disable cramfs in the freevxfs.conf file
-    echo "install cramfs /bin/true" | sudo tee /etc/modprobe.d/freevxfs.conf > /dev/null
+    echo "install freevxfs /bin/true" | sudo tee /etc/modprobe.d/freevxfs.conf > /dev/null
 
     # Inform the user that the mounting of cramfs filesystems has been disabled
     echo "Mounting of cramfs filesystems has been disabled."

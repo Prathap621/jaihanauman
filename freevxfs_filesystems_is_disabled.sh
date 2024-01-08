@@ -12,7 +12,7 @@ if [ ! -f "/etc/modprobe.d/freevxfs.conf" ]; then
     echo "install freevxfs /bin/true" | sudo tee /etc/modprobe.d/freevxfs.conf > /dev/null
 
     # Inform the user that the mounting of cramfs filesystems has been disabled
-    echo "Mounting of cramfs filesystems has been disabled."
+    echo "Mounting of freevxfs filesystems has been disabled."
 else
     # Inform the user that the freevxfs.conf file already exists
     echo "freevxfs.conf file already exists. No action taken."

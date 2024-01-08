@@ -9,10 +9,10 @@ if [ ! -f "/etc/modprobe.d/jffs2.conf" ]; then
     sudo chmod 644 /etc/modprobe.d/jffs2.conf
 
     # Add the configuration line to disable cramfs in the jffs2.conf file
-    echo "install cramfs /bin/true" | sudo tee /etc/modprobe.d/jffs2.conf > /dev/null
+    echo "install jffs2 /bin/true" | sudo tee /etc/modprobe.d/jffs2.conf > /dev/null
 
     # Inform the user that the mounting of cramfs filesystems has been disabled
-    echo "Mounting of cramfs filesystems has been disabled."
+    echo "Mounting of jffs2 filesystems has been disabled."
 else
     # Inform the user that the jffs2.conf file already exists
     echo "jffs2.conf file already exists. No action taken."

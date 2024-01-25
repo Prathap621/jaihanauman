@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Function to check if a package is installed
 is_package_installed() {
@@ -10,17 +11,16 @@ is_package_installed() {
     fi
 }
 
-# Function to remove apparmor
-remove_apparmor() {
-    echo "Removing apparmor..."
-    sudo apt remove apparmor -y
+# Function to purge apparmor
+purge_apparmor() {
+    echo "Purging apparmor..."
     sudo apt purge apparmor -y
 }
 
-# Function to remove ufw
-remove_ufw() {
-    echo "Removing ufw..."
-    sudo apt remove ufw -y
+# Function to purge ufw
+purge_ufw() {
+    echo "Purging ufw..."
+    sudo apt purge ufw -y
 }
 
 # Function to update package list
@@ -40,13 +40,13 @@ main() {
     update_package_list
 
     if is_package_installed "apparmor"; then
-        remove_apparmor
+        purge_apparmor
     else
         echo "apparmor is not installed."
     fi
 
     if is_package_installed "ufw"; then
-        remove_ufw
+        purge_ufw
     else
         echo "ufw is not installed."
     fi

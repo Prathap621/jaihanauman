@@ -1,8 +1,3 @@
-
-My apologies for the confusion. Thank you for pointing that out. Here's the corrected script with separate checks for tree and acl:
-
-bash
-Copy code
 #!/bin/bash
 set -e
 
@@ -34,6 +29,12 @@ install_acl() {
     sudo apt install acl -y
 }
 
+# Function to install nmap
+install_nmap() {
+    echo "Installing nmap..."
+    sudo apt install nmap -y
+}
+
 # Main script
 main() {
     if ! is_package_installed "dos2unix"; then
@@ -52,6 +53,12 @@ main() {
         install_acl
     else
         echo "acl is already installed."
+    fi
+
+    if ! is_package_installed "nmap"; then
+        install_nmap
+    else
+        echo "nmap is already installed."
     fi
 
     echo "Installation completed."

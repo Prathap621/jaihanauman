@@ -1,44 +1,43 @@
 #!/bin/bash
 
-# Function to configure SSH parameters on Ubuntu
-function configure_ssh_parameters_ubuntu() {
-  echo "Configuring SSH parameters on Ubuntu..."
-  # Edit sshd_config
-  sudo sed -i '/^#LoginGraceTime/c\LoginGraceTime 60' /etc/ssh/sshd_config
-  sudo sed -i '/^#ClientAliveInterval/c\ClientAliveInterval 120' /etc/ssh/sshd_config
-  sudo sed -i '/^#ClientAliveCountMax/c\ClientAliveCountMax 3' /etc/ssh/sshd_config
-  sudo sed -i '/^#PermitRootLogin/c\PermitRootLogin no' /etc/ssh/sshd_config
-  sudo sed -i '/^#X11Forwarding/c\X11Forwarding no' /etc/ssh/sshd_config
-  sudo sed -i '/^#MaxStartups/c\MaxStartups 10:30:100' /etc/ssh/sshd_config
-  sudo sed -i '/^#allow_tcp_forwarding_count/c\allow_tcp_forwarding_count yes' /etc/ssh/sshd_config
+# Function to update or add SSH configuration settings uniquely
+update_sshd_config_unique() {
+    local key="$1"
+    local value="$2"
+    local sshd_config="/etc/ssh/sshd_config"
+    local tmp_file=$(mktemp)
+
+    # Check parameter already exists in the file
+    if grep -qE "^[#\s]*${key}\b" "$sshd_config"; then
+        # Configuration parameter already exists, remove all occurrences
+        sed -e "/^[#\s]*${key}\b/d" "$sshd_config" > "$tmp_file"
+    else
+        # Configuration parameter doesn't exist yet
+        cp "$sshd_config" "$tmp_file"
+    fi
+
+    # Append new parameter
+    echo "${key} ${value}" >> "$tmp_file"
+
+    # Replace the original config file with the modified one
+    mv "$tmp_file" "$sshd_config"
+    chmod 600 "$sshd_config" # Ensure the file permissions are secure
 }
 
-# Function to configure SSH parameters on AlmaLinux
-function configure_ssh_parameters_almalinux() {
-  echo "Configuring SSH parameters on AlmaLinux..."
-  # Edit sshd_config
-  sudo sed -i '/^#LoginGraceTime/c\LoginGraceTime 60' /etc/ssh/sshd_config
-  sudo sed -i '/^#ClientAliveInterval/c\ClientAliveInterval 120' /etc/ssh/sshd_config
-  sudo sed -i '/^#ClientAliveCountMax/c\ClientAliveCountMax 3' /etc/ssh/sshd_config
-  sudo sed -i '/^#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config
-  sudo sed -i '/^#X11Forwarding/c\X11Forwarding no' /etc/ssh/sshd_config
-  sudo sed -i '/^#MaxStartups/c\MaxStartups 10:30:100' /etc/ssh/sshd_config
-}
+# Example usage for Ubuntu 20.04
+echo "Configuring SSH parameters ubunt"
 
-# Read OS distribution from /etc/os-release
-os_distribution=$(grep -oP '(?<=^ID=).+' /etc/os-release)
+# Update SSH configuration parameters uniquely
+update_sshd_config_unique "ClientAliveInterval" "120"
+update_sshd_config_unique "ClientAliveCountMax" "3"
+update_sshd_config_unique "X11Forwarding" "no"
+update_sshd_config_unique "AllowTcpForwarding" "yes"
+update_sshd_config_unique "PrintMotd" "no"
+update_sshd_config_unique "MaxStartups" "10:30:100"
 
-# Check OS distribution and configure SSH parameters
-case $os_distribution in
-  "ubuntu"|"Ubuntu")
-    echo "Detected Ubuntu..."
-    configure_ssh_parameters_ubuntu
-    ;;
-  "almalinux"|"AlmaLinux")
-    echo "Detected AlmaLinux..."
-    configure_ssh_parameters_almalinux
-    ;;
-  *)
-    echo "Unsupported OS distribution."
-    ;;
-esac
+echo "SSH configuration updated. Restarting SSH service..."
+
+# Restart SSH service to apply changes
+sudo systemctl restart sshd
+
+echo "SSH service restarted successfully."

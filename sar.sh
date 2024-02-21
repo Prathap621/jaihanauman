@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Function to install sysstat
+# install sysstat
 install_sysstat() {
     echo "Installing sysstat..."
     sudo apt-get install sysstat -y

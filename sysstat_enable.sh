@@ -1,20 +1,24 @@
 #!/bin/bash
 
-# Check if ENABLED is not set in /etc/default/sysstat
-if grep -q '^ENABLED=""' /etc/default/sysstat; then
-    # Set ENABLED="true"
-    sed -i 's/ENABLED=""/ENABLED="true"/' /etc/default/sysstat
+update_cron() {
+    stat=$(cat /etc/cron.d/sysstat | grep "*/5 \* \* \* \* root command -v debian-sa1")
+    if [ -z "$stat" ]; then
+        echo "Updating existing cron entry..."
+        sudo sed -i 's/^5-55\/10 \* \* \* \* .*$/\*/5 \* \* \* \* root command -v debian-sa1 > \/dev\/null \&\& debian-sa1 1 1/' /etc/cron.d/sysstat
+    else
+        echo "The cron is already updated"
+    fi
+}
 
-    # Update /etc/cron.d/sysstat entry
-    sed -i 's/5-55\/10 \* \* \* \* root command -v debian-sa1 > \/dev\/null && debian-sa1 1 1/\/5 \* \* \* \* root command -v debian-sa1 > \/dev\/null && debian-sa1 1 1/' /etc/cron.d/sysstat
+stop_and_start_sysstat() {
+    echo "Stopping sysstat service..."
+    sudo /etc/init.d/sysstat stop
+    echo "Starting sysstat service..."
+    sudo /etc/init.d/sysstat start
+}
 
-    # Stop sysstat service
-    /etc/init.d/sysstat stop
+# Check and update cron entry
+update_cron
 
-    # Start sysstat service
-    /etc/init.d/sysstat start
-
-    echo "sysstat service restarted."
-else
-    echo "ENABLED is already in place"
-fi
+# Restart sysstat service
+stop_and_start_sysstat

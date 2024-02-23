@@ -14,7 +14,7 @@ if grep -q '^ENABLED=""' /etc/default/sysstat; then
     # Start sysstat service
     /etc/init.d/sysstat start
 
-    echo "Configuration updated and sysstat service restarted."
+    echo "sysstat service restarted."
 else
-    echo "ENABLED is already set to true. No changes made."
+    echo "ENABLED is already in place"
 fi

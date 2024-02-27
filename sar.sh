@@ -1,44 +1,20 @@
 #!/bin/bash
 
-# install sysstat
-install_sysstat() {
-    echo "Installing sysstat..."
-    sudo apt-get install sysstat -y
-}
+# Define the new content for the /etc/cron.d/sysstat file
+NEW_CONTENT="
+# The first element of the path is a directory where the debian-sa1
+# script is located
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 
-# Function to modify /etc/default/sysstat
-modify_sysstat_config() {
-    echo "Modifying /etc/default/sysstat..."
-    sudo sed -i 's/ENABLED="false"/ENABLED="true"/' /etc/default/sysstat
-}
+# Activity reports every 5 minutes everyday
+*/5 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1
 
-# Function to modify /etc/cron.d/sysstat
-modify_cron_config() {
-    echo "Modifying /etc/cron.d/sysstat..."
-    sudo sed -i 's/5-55\/10 \* \* \* \* root command -v debian-sa1 > \/dev\/null && debian-sa1 1 1/\/5 \* \* \* \* root command -v debian-sa1 > \/dev\/null && debian-sa1 1 1/' /etc/cron.d/sysstat
-}
+# Additional run at 23:59 to rotate the statistics file
+59 23 * * * root command -v debian-sa1 > /dev/null && debian-sa1 60 2
+"
 
-# Function to stop sysstat service
-stop_sysstat_service() {
-    echo "Stopping sysstat service..."
-    sudo /etc/init.d/sysstat stop
-}
+# Update the /etc/cron.d/sysstat file with the new content
+echo "$NEW_CONTENT" | sudo tee /etc/cron.d/sysstat >/dev/null
 
-# Function to start sysstat service
-start_sysstat_service() {
-    echo "Starting sysstat service..."
-    sudo /etc/init.d/sysstat start
-}
-
-# Main script
-main() {
-    install_sysstat
-    modify_sysstat_config
-    modify_cron_config
-    stop_sysstat_service
-    start_sysstat_service
-    echo "Sysstat configuration has been updated."
-}
-
-# Run the main function
-main
+# Restart the sysstat service
+sudo systemctl restart sysstat

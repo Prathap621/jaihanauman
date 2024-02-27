@@ -37,9 +37,16 @@ sysctl_entries=(
   "net.ipv4.ip_forward = 1"
 )
 
-# Function to check if a sysctl entry is present in /etc/sysctl.conf
-function is_sysctl_entry_present() {
-  grep -q "$1" /etc/sysctl.conf
+# Function to update parameter in the sysctl.conf file
+function update_parameter() {
+    parameter="$1"
+    value="$2"
+
+    # Remove any existing lines containing the parameter
+    sudo sed -i "/^$parameter/d" /etc/sysctl.conf
+
+    # Add the new line with the parameter and value
+    echo "$parameter = $value" | sudo tee -a /etc/sysctl.conf > /dev/null
 }
 
 # Check if /etc/sysctl.conf exists
@@ -50,21 +57,12 @@ fi
 
 # Check if sysctl entries are present and update if necessary
 for entry in "${sysctl_entries[@]}"; do
-  if ! is_sysctl_entry_present "$entry"; then
-    echo "Adding sysctl entry: $entry"
-    echo "$entry" >> /etc/sysctl.conf
-  else
-    echo "Sysctl entry already exists: $entry"
-  fi
+  parameter=$(echo "$entry" | cut -d' ' -f1)
+  value=$(echo "$entry" | cut -d' ' -f3)
+  update_parameter "$parameter" "$value"
 done
-
-# Disable IPv6
-echo "Disabling IPv6..."
-echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 
 # Apply the changes
 sysctl -p
 
-echo "Sysctl entries have"
+echo "Sysctl entries have been updated."

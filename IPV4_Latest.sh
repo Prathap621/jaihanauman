@@ -5,14 +5,11 @@ function update_parameter() {
     parameter="$1"
     value="$2"
 
-    # Check if parameter is present in the sysctl.conf file
-    if grep -q "^$parameter" /etc/sysctl.conf; then
-        # Parameter is already present, update the value
-        sudo sed -i "s/^$parameter.*/$parameter = $value/" /etc/sysctl.conf
-    else
-        # Parameter is not present, add a new line with the parameter and value
-        echo "$parameter = $value" | sudo tee -a /etc/sysctl.conf > /dev/null
-    fi
+    # Remove any existing lines containing the parameter
+    sudo sed -i "/^$parameter/d" /etc/sysctl.conf
+
+    # Add the new line with the parameter and value
+    echo "$parameter = $value" | sudo tee -a /etc/sysctl.conf > /dev/null
 }
 
 # Update net.ipv4.ip_forward

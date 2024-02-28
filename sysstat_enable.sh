@@ -1,24 +1,20 @@
 #!/bin/bash
 
-update_cron() {
-    stat=$(cat /etc/cron.d/sysstat | grep "*/5 \* \* \* \* root command -v debian-sa1")
-    if [ -z "$stat" ]; then
-        echo "Updating existing cron entry..."
-        sudo sed -i 's/^5-55\/10 \* \* \* \* .*$/\*/5 \* \* \* \* root command -v debian-sa1 > \/dev\/null \&\& debian-sa1 1 1/' /etc/cron.d/sysstat
-    else
-        echo "The cron is already updated"
-    fi
-}
+# Define the new content for the /etc/cron.d/sysstat file
+NEW_CONTENT="
+# The first element of the path is a directory where the debian-sa1
+# script is located
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 
-stop_and_start_sysstat() {
-    echo "Stopping sysstat service..."
-    sudo /etc/init.d/sysstat stop
-    echo "Starting sysstat service..."
-    sudo /etc/init.d/sysstat start
-}
+# Activity reports every 5 minutes everyday
+*/5 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1
 
-# Check and update cron entry
-update_cron
+# Additional run at 23:59 to rotate the statistics file
+59 23 * * * root command -v debian-sa1 > /dev/null && debian-sa1 60 2
+"
 
-# Restart sysstat service
-stop_and_start_sysstat
+# Update the /etc/cron.d/sysstat file with the new content
+echo "$NEW_CONTENT" | sudo tee /etc/cron.d/sysstat >/dev/null
+
+# Restart the sysstat service
+sudo systemctl restart sysstat

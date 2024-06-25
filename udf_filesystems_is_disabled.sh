@@ -6,7 +6,7 @@ if [ ! -f "/etc/modprobe.d/udf.conf" ]; then
     sudo touch /etc/modprobe.d/udf.conf
 
     # Set the permissions of the file to 755
-    sudo chmod 755 /etc/modprobe.d/udf.conf
+    sudo chmod 644 /etc/modprobe.d/udf.conf
 
     # Add the configuration line to disable cramfs in the udf.conf file
     echo "install udf /bin/true" | sudo tee /etc/modprobe.d/udf.conf > /dev/null

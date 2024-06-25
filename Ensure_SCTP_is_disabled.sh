@@ -6,7 +6,7 @@ if [ ! -f "/etc/modprobe.d/sctp.conf" ]; then
     sudo touch /etc/modprobe.d/sctp.conf
 
     # Set the permissions of the file to 755
-    sudo chmod 755 /etc/modprobe.d/sctp.conf
+    sudo chmod 644 /etc/modprobe.d/sctp.conf
 
     # Add the configuration line to disable SCTP in the sctp.conf file
     echo "install sctp /bin/true" | sudo tee /etc/modprobe.d/sctp.conf > /dev/null

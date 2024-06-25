@@ -6,7 +6,7 @@ if [ ! -f "/etc/modprobe.d/squashfs.conf" ]; then
     sudo touch /etc/modprobe.d/squashfs.conf
 
     # Set the permissions of the file to 755
-    sudo chmod 755 /etc/modprobe.d/squashfs.conf
+    sudo chmod 644 /etc/modprobe.d/squashfs.conf
 
     # Add the configuration line to disable cramfs in the squashfs.conf file
     echo "install squashfs /bin/true" | sudo tee /etc/modprobe.d/squashfs.conf > /dev/null

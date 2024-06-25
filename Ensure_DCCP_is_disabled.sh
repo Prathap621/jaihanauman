@@ -6,7 +6,7 @@ if [ ! -f "/etc/modprobe.d/dccp.conf" ]; then
     sudo touch /etc/modprobe.d/dccp.conf
 
     # Set the permissions of the file to 755
-    sudo chmod 755 /etc/modprobe.d/dccp.conf
+    sudo chmod 644 /etc/modprobe.d/dccp.conf
 
     # Add the configuration line to disable DCCP in the dccp.conf file
     echo "install dccp /bin/true" | sudo tee /etc/modprobe.d/dccp.conf > /dev/null

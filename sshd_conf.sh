@@ -25,7 +25,7 @@ update_sshd_config_unique() {
 }
 
 # Example usage for Ubuntu 20.04
-echo "Configuring SSH parameters ubunt"
+echo "Configuring SSH parameters..."
 
 # Update SSH configuration parameters uniquely
 update_sshd_config_unique "ClientAliveInterval" "120"
@@ -34,6 +34,8 @@ update_sshd_config_unique "X11Forwarding" "no"
 update_sshd_config_unique "AllowTcpForwarding" "yes"
 update_sshd_config_unique "PrintMotd" "no"
 update_sshd_config_unique "MaxStartups" "10:30:100"
+update_sshd_config_unique "PubkeyAuthentication" "yes"
+update_sshd_config_unique "RevokedKeys" "/home/deploy/.ssh/revoked_keys"
 
 echo "SSH configuration updated. Restarting SSH service..."
 
